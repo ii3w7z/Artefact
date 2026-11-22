@@ -1,7 +1,6 @@
 package com.chethan616.clearpdf.ui.desk
 
 import android.content.Intent
-import android.os.Build
 import android.speech.tts.TextToSpeech
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -232,8 +231,7 @@ private fun SettingsRoot(vm: AppViewModel, openLicences: () -> Unit, openGlass: 
 private fun AppLanguagePage(onBack: () -> Unit) {
     val context = LocalContext.current
     val selectedTag = AppLocale.selectedTag(context)
-    val systemName = if (Build.VERSION.SDK_INT >= 24) context.resources.configuration.locales[0].getDisplayName()
-        else @Suppress("DEPRECATION") context.resources.configuration.locale.getDisplayName()
+    val systemName = AppLocale.systemDisplayName(context)
     val languages = AppLocale.supportedTags
 
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 32.dp)) {
@@ -255,12 +253,11 @@ private fun AppLanguagePage(onBack: () -> Unit) {
                 )
                 languages.forEach { tag ->
                     val locale = Locale.forLanguageTag(tag)
-                    val native = locale.getDisplayName(locale).replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
                     val selected = selectedTag.equals(tag, ignoreCase = true)
                     SettingRow(
                         if (selected) LucideIcons.Check else LucideIcons.Globe,
                         if (selected) Candy.Sky else Candy.Grape,
-                        native,
+                        AppLocale.displayName(context, locale),
                         onClick = { AppLocale.select(context, tag) },
                         value = if (selected) stringResource(R.string.read_aloud_language_selected) else null,
                     )
