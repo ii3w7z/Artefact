@@ -89,7 +89,7 @@ object AppLocale {
     }
 
     // Android's per-app language picker can return a script-qualified tag such as zh-Hans-CN.
-    private fun isSimplifiedChinese(locale: Locale): Boolean =
+    internal fun isSimplifiedChinese(locale: Locale): Boolean =
         locale.language == "zh" && (locale.script == "Hans" ||
             (locale.script.isEmpty() && locale.country in simplifiedChineseRegions))
 

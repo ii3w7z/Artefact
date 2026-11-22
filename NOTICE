@@ -41,6 +41,12 @@ Bricolage Grotesque (Copyright 2022 The Bricolage Grotesque Project Authors), Fr
 texts are in android/app/src/main/assets/licences/OFL-*.txt. The app's Licences screen credits the
 font projects and links to their sources.
 
+The Simplified Chinese interface uses Artefact SC Sans, a renamed subset of Adobe's Noto Sans SC
+(Copyright 2014–2021 Adobe). Its collection card titles use Artefact SC Card Serif, a renamed
+subset of Adobe's Source Han Serif SC Bold (Copyright 2017–2022 Adobe). Both subsets remain under
+the SIL Open Font License 1.1. The original copyright and licence notices are in
+android/app/src/main/assets/licences/OFL-NotoSansSC.txt and OFL-SourceHanSerif.txt.
+
 The original notice of PdfCraft for Android follows.
 
 ----------------------------------------------------------------------------------------------------

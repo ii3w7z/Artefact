@@ -625,6 +625,8 @@ private fun LicencesPage(onBack: () -> Unit) {
             Credit("Bricolage Grotesque", stringResource(R.string.licences_role_titles), "OFL-1.1 · The Bricolage Grotesque Project Authors", "https://github.com/ateliertriay/bricolage", "OFL-BricolageGrotesque.txt"),
             Credit("Fraunces", stringResource(R.string.licences_role_titles), "OFL-1.1 · The Fraunces Project Authors", "https://github.com/undercasetype/Fraunces", "OFL-Fraunces.txt"),
             Credit("DM Serif Display", stringResource(R.string.licences_role_titles), "OFL-1.1 · Colophon Foundry", "https://github.com/googlefonts/dm-fonts", "OFL-DMSerifDisplay.txt"),
+            Credit("Noto Sans SC", stringResource(R.string.licences_role_ui_font), "OFL-1.1 · Adobe", "https://github.com/google/fonts/tree/a85815a42757630ce188fdad368c2dfc444d4773/ofl/notosanssc", "OFL-NotoSansSC.txt"),
+            Credit("Source Han Serif SC", stringResource(R.string.licences_role_titles), "OFL-1.1 · Adobe", "https://github.com/adobe-fonts/source-han-serif/tree/7889f11bf31170b5d092a083b357c8c8130f89e0", "OFL-SourceHanSerif.txt"),
             Credit("Doto", stringResource(R.string.licences_role_lists), "OFL-1.1 · The Doto Project Authors", "https://github.com/oliverlalan/Doto", "OFL-Doto.txt"),
             Credit("Dancing Script", stringResource(R.string.licences_role_signatures), "OFL-1.1 · The Dancing Script Project Authors", "https://github.com/googlefonts/DancingScript", "OFL-DancingScript.txt"),
             Credit("Source Sans 3, Source Serif 4", stringResource(R.string.licences_role_doc_fonts), "OFL-1.1 · Adobe", "https://github.com/adobe-fonts", "OFL-SourceSans3.txt"),

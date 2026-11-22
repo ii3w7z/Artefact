@@ -85,6 +85,7 @@ import com.chethan616.clearpdf.ui.mascot.Mascot
 import com.chethan616.clearpdf.ui.mascot.MascotMood
 import com.chethan616.clearpdf.ui.theme.Candy
 import com.chethan616.clearpdf.ui.theme.ClearType
+import com.chethan616.clearpdf.ui.theme.ClearTypography
 import com.chethan616.clearpdf.ui.theme.Tone
 import com.chethan616.clearpdf.ui.theme.clear
 import com.chethan616.clearpdf.ui.theme.glowing
@@ -352,38 +353,39 @@ private fun DeskHeader(vm: AppViewModel) {
     }
 }
 
-private fun deskFace(f: DeskFilter): TextStyle = when (f) {
-    DeskFilter.All -> ClearType.DeskAll
-    DeskFilter.Notes -> ClearType.DeskNotes
-    DeskFilter.Todo -> ClearType.DeskTodo
-    DeskFilter.Pdfs -> ClearType.DeskPdfs
-    DeskFilter.Images -> ClearType.DeskImages
-    DeskFilter.Audio -> ClearType.DeskAudio
+private fun deskFace(f: DeskFilter, typography: ClearTypography): TextStyle = typography.DeskTitle ?: when (f) {
+    DeskFilter.All -> typography.DeskAll
+    DeskFilter.Notes -> typography.DeskNotes
+    DeskFilter.Todo -> typography.DeskTodo
+    DeskFilter.Pdfs -> typography.DeskPdfs
+    DeskFilter.Images -> typography.DeskImages
+    DeskFilter.Audio -> typography.DeskAudio
 }
 
 /**
  * The big white title; a new chip slides a new one up in its place. Every title is set at the same
  * size and in a box of the same height, so nothing below it moves when the chip changes. The size is
- * the largest (up to [ClearType.DeskTitleSize]) at which the widest of all six titles fits the width.
+ * the largest (up to [ClearTypography.DeskTitleSize]) at which the widest of all six titles fits the width.
  */
 @Composable
 private fun DeskTitle(filter: DeskFilter) {
     val c = clear
+    val typography = ClearType
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     val titles = DeskFilter.entries.map { it to stringResource(it.title) }
     BoxWithConstraints(Modifier.fillMaxWidth().padding(start = 6.dp, top = 20.dp)) {
         val widthPx = constraints.maxWidth
-        val size = remember(titles, widthPx, density.density, density.fontScale) {
-            var s = ClearType.DeskTitleSize.value
+        val size = remember(titles, widthPx, density.density, density.fontScale, typography) {
+            var s = typography.DeskTitleSize.value
             while (s > 24f && titles.any { (f, text) ->
-                    measurer.measure(text, deskFace(f).copy(fontSize = s.sp), maxLines = 1, softWrap = false).size.width > widthPx
+                    measurer.measure(text, deskFace(f, typography).copy(fontSize = s.sp), maxLines = 1, softWrap = false).size.width > widthPx
                 }
             ) s -= 1f
             s.sp
         }
         // a little more than the line: AnimatedContent clips, and an italic g's tail runs below it
-        val height = with(density) { ClearType.DeskTitleLine.toDp() } + 10.dp
+        val height = with(density) { typography.DeskTitleLine.toDp() } + 10.dp
         AnimatedContent(
             filter,
             transitionSpec = {
@@ -395,7 +397,7 @@ private fun DeskTitle(filter: DeskFilter) {
         ) { f ->
             BasicText(
                 stringResource(f.title),
-                style = deskFace(f).copy(color = c.hero, fontSize = size).glowing(c),
+                style = deskFace(f, typography).copy(color = c.hero, fontSize = size).glowing(c),
                 maxLines = 1,
                 softWrap = false,
                 modifier = Modifier.fillMaxWidth(),

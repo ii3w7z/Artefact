@@ -4,10 +4,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.chethan616.clearpdf.R
 import com.chethan616.clearpdf.ui.ThemeChoice
+import com.chethan616.clearpdf.ui.utils.AppLocale
 
 /**
  * The accents: Apple's system hues, one per tool, the same in both themes. Icons, toggles, the
@@ -234,24 +237,49 @@ private val Trim = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightS
 private fun display(family: FontFamily, size: TextUnit, line: TextUnit, tracking: TextUnit) =
     TextStyle(fontFamily = family, fontSize = size, lineHeight = line, letterSpacing = tracking, lineHeightStyle = Trim)
 
+/** Noto Sans SC with the interface glyphs and common Han characters. */
+private val SimplifiedChineseSans = FontFamily(
+    listOf(500, 600, 700, 800).map { weight ->
+        Font(R.font.artefact_sc_sans, FontWeight(weight), variationSettings = FontVariation.Settings(FontVariation.weight(weight)))
+    },
+)
+
+/** Source Han Serif SC Bold, subset for the collection card titles. */
+private val SimplifiedChineseCollectionSerif = FontFamily(Font(R.font.artefact_sc_card, FontWeight.Bold))
+
 /**
- * The type scale, all Outfit (the mock's face): heavy and tight for heroes and titles (Apple's display
- * sizes, a touch rounder), plain for reading. [Serif] and [Doto] are the playful accents on cards.
+ * The shared type scale. Simplified Chinese uses a medium reading weight and upright titles with
+ * Chinese and Latin glyphs from the same family.
  */
-object ClearType {
-    val Hero = display(outfit(700), 54.sp, 56.sp, (-1.4).sp)
-    val Display = display(outfit(600), 42.sp, 46.sp, (-1.0).sp)
-    val Headline = display(outfit(700), 26.sp, 30.sp, (-0.5).sp)
-    val Title = display(outfit(700), 18.sp, 22.sp, (-0.2).sp)
-    val Tile = display(outfit(700), 17.sp, 20.sp, (-0.2).sp)
-    val Number = display(outfit(700), 22.sp, 24.sp, 0.sp).copy(fontFeatureSettings = "tnum")
+@Immutable
+internal class ClearTypography(private val simplifiedChinese: Boolean) {
+    val BodyFont = if (simplifiedChinese) SimplifiedChineseSans else Outfit
+    private val readingWeight = if (simplifiedChinese) FontWeight.Medium else FontWeight.Normal
+
+    private fun heading(family: FontFamily, chineseWeight: Int, size: TextUnit, line: TextUnit, tracking: TextUnit) =
+        if (simplifiedChinese) {
+            display(SimplifiedChineseSans, size, line, 0.sp).copy(fontWeight = FontWeight(chineseWeight))
+        } else {
+            display(family, size, line, tracking)
+        }
+
+    val Hero = heading(outfit(700), 700, 54.sp, 56.sp, (-1.4).sp)
+    val Display = heading(outfit(600), 700, 42.sp, 46.sp, (-1.0).sp)
+    val Headline = heading(outfit(700), 700, 26.sp, 30.sp, (-0.5).sp)
+    val Title = heading(outfit(700), 700, 18.sp, 22.sp, (-0.2).sp)
+    val Tile = heading(outfit(700), 700, 17.sp, 20.sp, (-0.2).sp)
+    val Number = heading(outfit(700), 700, 22.sp, 24.sp, 0.sp).copy(fontFeatureSettings = "tnum")
 
     /** A note card's title: bold, tight, in the note's blue. */
-    val CardTitle = display(outfit(800), 27.sp, 29.sp, (-0.6).sp)
+    val CardTitle = heading(outfit(800), 800, 27.sp, 29.sp, (-0.6).sp)
     /** A collection card's word ("Files"). */
-    val SerifWord = display(Serif, 52.sp, 52.sp, (-1.2).sp)
+    val SerifWord = if (simplifiedChinese) {
+        display(SimplifiedChineseCollectionSerif, 48.sp, 52.sp, 0.sp).copy(fontWeight = FontWeight.Bold)
+    } else {
+        display(Serif, 52.sp, 52.sp, (-1.2).sp)
+    }
     /** A list card's title. */
-    val DotTitle = display(Doto, 30.sp, 32.sp, 0.sp)
+    val DotTitle = heading(Doto, 700, 30.sp, 32.sp, 0.sp)
 
     // The desk's big title, one face per shelf, each in the voice of what it holds: a clean bold
     // grotesque for everything, an upright soft serif for notes, dots for lists, an editorial serif
@@ -260,6 +288,11 @@ object ClearType {
     // title; the desk shrinks that one size (for every title alike) only if a translation is too wide.
     val DeskTitleSize = 44.sp
     val DeskTitleLine = 50.sp
+    val DeskTitle = if (simplifiedChinese) {
+        display(SimplifiedChineseSans, DeskTitleSize, DeskTitleLine, 0.sp).copy(fontWeight = FontWeight.Bold)
+    } else {
+        null
+    }
     val DeskAll = display(outfit(500), DeskTitleSize, DeskTitleLine, (-1.0).sp)
     val DeskNotes = display(fraunces(600, 50f, 72.sp), DeskTitleSize, DeskTitleLine, (-0.8).sp)
     val DeskTodo = display(Doto, DeskTitleSize, DeskTitleLine, 0.sp)
@@ -267,23 +300,29 @@ object ClearType {
     val DeskImages = display(jakarta(300, italic = true), DeskTitleSize, DeskTitleLine, (-1.4).sp).copy(fontStyle = FontStyle.Italic)
     val DeskAudio = display(bricolage(300, 100f, 72.sp), DeskTitleSize, DeskTitleLine, (-1.0).sp)
 
-    /** The Tools screen's title: Fraunces at its softest and quirkiest, a face no other screen uses. */
-    val ToolsTitle = display(fraunces(700, 100f, 72.sp, wonk = 1f), DeskTitleSize, DeskTitleLine, (-0.8).sp)
+    /** The Tools screen's large title. */
+    val ToolsTitle = heading(fraunces(700, 100f, 72.sp, wonk = 1f), 700, DeskTitleSize, DeskTitleLine, (-0.8).sp)
     /** A tool tile's name, set like the desk's "Files" and "Pdf" words. */
-    val ToolWord = display(Serif, 31.sp, 33.sp, (-0.6).sp)
+    val ToolWord = heading(Serif, 700, 31.sp, 33.sp, (-0.6).sp)
 
-    val Eyebrow = TextStyle(fontFamily = Outfit, fontWeight = FontWeight.SemiBold, fontSize = 11.5.sp, lineHeight = 14.sp, letterSpacing = 1.4.sp)
-    val Body = TextStyle(fontFamily = Outfit, fontWeight = FontWeight.Normal, fontSize = 15.sp, lineHeight = 22.sp)
+    val Eyebrow = TextStyle(fontFamily = BodyFont, fontWeight = FontWeight.SemiBold, fontSize = 11.5.sp, lineHeight = 14.sp, letterSpacing = if (simplifiedChinese) 0.5.sp else 1.4.sp)
+    val Body = TextStyle(fontFamily = BodyFont, fontWeight = readingWeight, fontSize = 15.sp, lineHeight = 22.sp)
     val BodyStrong = Body.copy(fontWeight = FontWeight.SemiBold)
-    val Label = TextStyle(fontFamily = Outfit, fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 18.sp)
-    val Caption = TextStyle(fontFamily = Outfit, fontWeight = FontWeight.Normal, fontSize = 11.5.sp, lineHeight = 15.sp)
+    val Label = TextStyle(fontFamily = BodyFont, fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 18.sp)
+    val Caption = TextStyle(fontFamily = BodyFont, fontWeight = readingWeight, fontSize = 11.5.sp, lineHeight = 15.sp)
 
-    // The Recent card keeps its own Plus Jakarta Sans (its title, when, and chips), set exactly as
-    // before the interface moved to Outfit: the owner's chosen look for that card.
-    val RecentTitle = display(jakarta(700), 17.sp, 22.sp, (-0.2).sp)
-    val RecentWhen = TextStyle(fontFamily = Jakarta, fontWeight = FontWeight.Normal, fontSize = 10.5.sp, lineHeight = 15.sp)
-    val RecentChip = TextStyle(fontFamily = Jakarta, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, lineHeight = 18.sp)
+    private val recentFont = if (simplifiedChinese) SimplifiedChineseSans else Jakarta
+    val RecentTitle = heading(jakarta(700), 700, 17.sp, 22.sp, (-0.2).sp)
+    val RecentWhen = TextStyle(fontFamily = recentFont, fontWeight = readingWeight, fontSize = 10.5.sp, lineHeight = 15.sp)
+    val RecentChip = TextStyle(fontFamily = recentFont, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, lineHeight = 18.sp)
 }
+
+private val defaultTypography = ClearTypography(simplifiedChinese = false)
+private val chineseTypography = ClearTypography(simplifiedChinese = true)
+private val LocalClearTypography = staticCompositionLocalOf { defaultTypography }
+
+internal val ClearType: ClearTypography
+    @Composable @ReadOnlyComposable get() = LocalClearTypography.current
 
 /** A hero title's soft glow, so white type reads on the pale sky. */
 fun TextStyle.glowing(c: ClearColors): TextStyle = copy(shadow = Shadow(c.heroGlow, Offset(0f, 2f), 22f))
@@ -295,5 +334,11 @@ fun ClearTheme(choice: ThemeChoice, content: @Composable () -> Unit) {
         ThemeChoice.Light -> false
         ThemeChoice.Dark -> true
     }
-    CompositionLocalProvider(LocalClearColors provides if (dark) DarkClear else LightClear, content = content)
+    val locale = LocalConfiguration.current.locales[0]
+    val typography = if (locale != null && AppLocale.isSimplifiedChinese(locale)) chineseTypography else defaultTypography
+    CompositionLocalProvider(
+        LocalClearColors provides if (dark) DarkClear else LightClear,
+        LocalClearTypography provides typography,
+        content = content,
+    )
 }

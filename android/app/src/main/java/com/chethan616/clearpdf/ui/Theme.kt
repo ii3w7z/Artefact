@@ -9,15 +9,18 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.chethan616.clearpdf.ui.theme.ClearType
 
-/** The app's reading face: Outfit, the same as the glass screens (the old name stays for the viewer's code). */
-val Inter: FontFamily get() = com.chethan616.clearpdf.ui.theme.Outfit
+/** The shared reading face, also used by the viewer. */
+val Inter: FontFamily
+    @Composable @ReadOnlyComposable get() = ClearType.BodyFont
 
 /** The colours the screens use beyond Material's roles (measured from the reference app's screens). */
 @Immutable
