@@ -250,8 +250,6 @@ object ClearType {
     val CardTitle = display(outfit(800), 27.sp, 29.sp, (-0.6).sp)
     /** A collection card's word ("Files"). */
     val SerifWord = display(Serif, 52.sp, 52.sp, (-1.2).sp)
-    /** Han glyphs on the collection card use the device's sans-serif face and default spacing. */
-    val CollectionWordHan = SerifWord.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, letterSpacing = 0.sp)
     /** A list card's title. */
     val DotTitle = display(Doto, 30.sp, 32.sp, 0.sp)
 

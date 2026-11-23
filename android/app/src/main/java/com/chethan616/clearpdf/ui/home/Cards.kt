@@ -492,18 +492,13 @@ fun Waveform(levels: List<Float>, progress: () -> Float, modifier: Modifier, col
 
 // ---- Collections ---------------------------------------------------------------------------------
 
-/** A collection ("Files", "Pdf") with a large title and two papers fanned in the corner. */
+/** A collection ("Files", "Pdf"): its word set big in serif, and two papers fanned in the corner. */
 @Composable
 fun CollectionCard(word: String, tone: CardTone, onOpen: () -> Unit, modifier: Modifier = Modifier, height: Dp = 150.dp, count: Int? = null) {
-    val titleStyle = if (word.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN }) {
-        ClearType.CollectionWordHan
-    } else {
-        ClearType.SerifWord
-    }
     Box(modifier.height(height).pressable(onOpen, pressedScale = 0.95f).cardPaint(tone, Offset(0.2f, 1.0f))) {
         Papers(Modifier.align(Alignment.TopEnd).padding(top = 14.dp, end = 14.dp))
         Text(
-            word, style = titleStyle, color = tone.accent, maxLines = 1,
+            word, style = ClearType.SerifWord, color = tone.accent, maxLines = 1,
             modifier = Modifier.align(Alignment.BottomStart).padding(start = 16.dp, bottom = 10.dp),
         )
         if (count != null && count > 0) {

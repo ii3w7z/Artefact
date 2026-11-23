@@ -1428,7 +1428,7 @@
     <string name="desk_title_images">我的图片</string>
     <string name="desk_title_audio">语音笔记</string>
     <!-- One word, set large in a serif on a card: keep it short -->
-    <string name="desk_word_files">文件</string>
+    <string name="desk_word_files">Files</string>
     <string name="desk_word_pdf">PDF</string>
     <string name="desk_recent">最近</string>
     <string name="desk_chip_pdfs">PDF</string>
