@@ -3219,28 +3219,6 @@ usage = "Android app UI typeface; source and license are also listed in the app'
 sha256 = "89b3fb38aa0d275d7a731d0d817a4f1622b316b4d7fbdedcf02ee9099ff68bc8"
 
 [[asset]]
-path = "android/app/src/main/res/font/artefact_sc_sans.ttf"
-title = "Artefact SC Sans (Noto Sans SC subset)"
-author = "Adobe"
-source = "https://github.com/google/fonts/blob/a85815a42757630ce188fdad368c2dfc444d4773/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf"
-licence = "OFL-1.1"
-licence_file = "android/app/src/main/assets/licences/OFL-NotoSansSC.txt"
-kind = "font"
-usage = "Android Simplified Chinese interface typeface. Renamed subset covers the Chinese resources, printable ASCII and GB2312 level 1 characters. The variable weight range is 500 to 800."
-sha256 = "6ed2a9ac040be98c1e8f63cec7eea7b66e43d55ed43eef3b5ab5334205dfa46f"
-
-[[asset]]
-path = "android/app/src/main/res/font/artefact_sc_card.otf"
-title = "Artefact SC Card Serif (Source Han Serif SC Bold subset)"
-author = "Adobe"
-source = "https://github.com/adobe-fonts/source-han-serif/blob/7889f11bf31170b5d092a083b357c8c8130f89e0/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf"
-licence = "OFL-1.1"
-licence_file = "android/app/src/main/assets/licences/OFL-SourceHanSerif.txt"
-kind = "font"
-usage = "Android Simplified Chinese collection card titles. Renamed subset covers the Files and PDF labels and printable ASCII."
-sha256 = "f84c60180cf9664333ab3d745a7a4da11e6929ff4d10968dde25cdf036d27734"
-
-[[asset]]
 path = "android/app/src/main/res/font/jakarta_italic.ttf"
 title = "Plus Jakarta Sans Italic"
 author = "The Plus Jakarta Sans Project Authors"

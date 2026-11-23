@@ -4,7 +4,7 @@
 
 Every asset Artefact includes, bundles or uses to build its published material, with its author, source and licence. The policy is in [docs/licensing-policy.md](docs/licensing-policy.md). The machine-readable list, with the SHA-256 of every asset but the translation catalogs, is [ATTRIBUTION.toml](ATTRIBUTION.toml). Licence texts are kept beside the assets and summarised in [NOTICE](NOTICE).
 
-## In this repository (267)
+## In this repository (265)
 
 | Asset | Title | Author | Licence | Source | Used for |
 |---|---|---|---|---|---|
@@ -269,8 +269,6 @@ Every asset Artefact includes, bundles or uses to build its published material, 
 
 | `android/app/src/main/res/font/outfit.ttf` | Outfit | The Outfit Project Authors | OFL-1.1 | https://github.com/Outfitio/Outfit-Fonts | Android app UI typeface; source and license are also listed in the app Licences screen |
 | `android/app/src/main/res/font/jakarta.ttf` | Plus Jakarta Sans Regular | The Plus Jakarta Sans Project Authors | OFL-1.1 | https://github.com/tokotype/PlusJakartaSans | Android app UI typeface; source and license are also listed in the app Licences screen |
-| `android/app/src/main/res/font/artefact_sc_sans.ttf` | Artefact SC Sans (Noto Sans SC subset) | Adobe | OFL-1.1 | https://github.com/google/fonts/blob/a85815a42757630ce188fdad368c2dfc444d4773/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf | Android Simplified Chinese interface. Renamed subset with weights 500–800, Chinese UI glyphs, printable ASCII and GB2312 level 1 characters. |
-| `android/app/src/main/res/font/artefact_sc_card.otf` | Artefact SC Card Serif (Source Han Serif SC Bold subset) | Adobe | OFL-1.1 | https://github.com/adobe-fonts/source-han-serif/blob/7889f11bf31170b5d092a083b357c8c8130f89e0/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf | Android Simplified Chinese collection cards. Renamed subset for the Files and PDF labels and printable ASCII. |
 | `android/app/src/main/res/font/jakarta_italic.ttf` | Plus Jakarta Sans Italic | The Plus Jakarta Sans Project Authors | OFL-1.1 | https://github.com/tokotype/PlusJakartaSans | Android app UI typeface; source and license are also listed in the app Licences screen |
 | `android/app/src/main/res/font/bricolage.ttf` | Bricolage Grotesque Variable | The Bricolage Grotesque Project Authors | OFL-1.1 | https://github.com/ateliertriay/bricolage | Android app UI typeface; source and license are also listed in the app Licences screen |
 | `android/app/src/main/res/font/fraunces.ttf` | Fraunces Variable | The Fraunces Project Authors | OFL-1.1 | https://github.com/undercasetype/Fraunces | Android app UI typeface; source and license are also listed in the app Licences screen |

@@ -117,15 +117,14 @@ fun ToolsScreen(vm: AppViewModel) {
             val measurer = rememberTextMeasurer()
             val density = LocalDensity.current
             val names = ToolCatalog.All.map { stringResource(it.label) }
-            val wordStyle = ClearType.ToolWord
             BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
                 val room = (maxWidth - TileGap) / 2 - TilePadding * 2
                 // one size for every tile (whatever the filter): the largest at which the longest word of any name fits
-                val wordSize = remember(names, room, density.density, density.fontScale, wordStyle) {
+                val wordSize = remember(names, room, density.density, density.fontScale) {
                     val roomPx = with(density) { room.toPx() }
-                    var s = wordStyle.fontSize.value
+                    var s = ClearType.ToolWord.fontSize.value
                     while (s > 18f && names.any { n ->
-                            n.split(' ').any { w -> measurer.measure(w, wordStyle.copy(fontSize = s.sp), maxLines = 1, softWrap = false).size.width > roomPx }
+                            n.split(' ').any { w -> measurer.measure(w, ClearType.ToolWord.copy(fontSize = s.sp), maxLines = 1, softWrap = false).size.width > roomPx }
                         }
                     ) s -= 1f
                     s.sp
