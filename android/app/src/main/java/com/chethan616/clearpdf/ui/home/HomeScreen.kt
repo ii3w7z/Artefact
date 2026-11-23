@@ -35,6 +35,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -88,6 +89,7 @@ import com.chethan616.clearpdf.ui.theme.ClearType
 import com.chethan616.clearpdf.ui.theme.Tone
 import com.chethan616.clearpdf.ui.theme.clear
 import com.chethan616.clearpdf.ui.theme.glowing
+import com.chethan616.clearpdf.ui.utils.AppLocale
 import com.chethan616.clearpdf.ui.viewer.VoicePlayer
 import kotlinx.coroutines.launch
 import com.kyant.backdrop.throttleBackdrops
@@ -352,12 +354,12 @@ private fun DeskHeader(vm: AppViewModel) {
     }
 }
 
-private fun deskFace(f: DeskFilter): TextStyle = when (f) {
+private fun deskFace(f: DeskFilter, simplifiedChinese: Boolean): TextStyle = when (f) {
     DeskFilter.All -> ClearType.DeskAll
     DeskFilter.Notes -> ClearType.DeskNotes
     DeskFilter.Todo -> ClearType.DeskTodo
-    DeskFilter.Pdfs -> ClearType.DeskPdfs
-    DeskFilter.Images -> ClearType.DeskImages
+    DeskFilter.Pdfs -> if (simplifiedChinese) ClearType.DeskNotes else ClearType.DeskPdfs
+    DeskFilter.Images -> if (simplifiedChinese) ClearType.DeskNotes else ClearType.DeskImages
     DeskFilter.Audio -> ClearType.DeskAudio
 }
 
@@ -371,13 +373,14 @@ private fun DeskTitle(filter: DeskFilter) {
     val c = clear
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
+    val simplifiedChinese = LocalConfiguration.current.locales[0]?.let(AppLocale::isSimplifiedChinese) == true
     val titles = DeskFilter.entries.map { it to stringResource(it.title) }
     BoxWithConstraints(Modifier.fillMaxWidth().padding(start = 6.dp, top = 20.dp)) {
         val widthPx = constraints.maxWidth
-        val size = remember(titles, widthPx, density.density, density.fontScale) {
+        val size = remember(titles, widthPx, density.density, density.fontScale, simplifiedChinese) {
             var s = ClearType.DeskTitleSize.value
             while (s > 24f && titles.any { (f, text) ->
-                    measurer.measure(text, deskFace(f).copy(fontSize = s.sp), maxLines = 1, softWrap = false).size.width > widthPx
+                    measurer.measure(text, deskFace(f, simplifiedChinese).copy(fontSize = s.sp), maxLines = 1, softWrap = false).size.width > widthPx
                 }
             ) s -= 1f
             s.sp
@@ -395,7 +398,7 @@ private fun DeskTitle(filter: DeskFilter) {
         ) { f ->
             BasicText(
                 stringResource(f.title),
-                style = deskFace(f).copy(color = c.hero, fontSize = size).glowing(c),
+                style = deskFace(f, simplifiedChinese).copy(color = c.hero, fontSize = size).glowing(c),
                 maxLines = 1,
                 softWrap = false,
                 modifier = Modifier.fillMaxWidth(),
